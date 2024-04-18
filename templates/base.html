@@ -4,15 +4,18 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{% block title%}Flask Platzi | {% endblock %}
-            
-        </title>
+        <title>{% block title %}Flask Platzi | {% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="{{url_for('static', filename="css/main.css)}}">
     </head>
     <body>
-        
-        
+        <header>
+                {% include 'navbar.html' %}
+
+        </header>
+        {% block content %}
+        <!-- Este es el lugar donde las plantillas hijas insertarán su contenido -->
+        {% endblock %}
     </body>
 </html>
