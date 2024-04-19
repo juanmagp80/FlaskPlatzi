@@ -4,9 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from flask import session
-from flask import flash
 from flask import url_for
-from flask import make_response
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SUPER SECRETO'
 
@@ -46,23 +44,24 @@ def index():
     return response
 
 @app.route('/hello', methods=['GET', 'POST'])
+@app.route('/hello', methods=['GET', 'POST'])
 def hello():
     user_ip = request.cookies.get('user_ip')
     login_form = LoginForm()
+    username = session.get('username')
     context = {
         'user_ip': user_ip, 
         'todos': todos,
-        'login_form': login_form
+        'login_form': login_form,
+        'username': username
         
     }
     if login_form.validate_on_submit():
         username = login_form.username.data
         session['username'] = username
-
-        flash('Nombre de usario registrado con Ã©xito!')
-
+        
         return redirect(url_for('index'))
-
+    
     return render_template('hello.html', **context)
 
 if __name__ == '__main__':
