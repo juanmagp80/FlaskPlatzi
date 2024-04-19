@@ -5,6 +5,13 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from flask import session
 from flask import url_for
+from flask import flash
+import unittest
+from app import create_app
+from app.forms import LoginForm
+
+
+app = create_app()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SUPER SECRETO'
 
@@ -13,11 +20,11 @@ bootstrap = Bootstrap(app)
 
 todos = ['Comprar cafe', 'Enviar solicitud de compra', 'Entregar video a productor']
 
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Submit')
 
+@app.cli.command()
+def test():
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner().run(tests)
 
 
 @app.cli.command()
@@ -59,6 +66,7 @@ def hello():
     if login_form.validate_on_submit():
         username = login_form.username.data
         session['username'] = username
+        flash('Nombre de usuario registrado con éxito')
         
         return redirect(url_for('index'))
     
