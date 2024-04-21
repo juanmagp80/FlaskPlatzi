@@ -9,13 +9,12 @@ from flask import flash
 import unittest
 from app import create_app
 from app.forms import LoginForm
+from flask import make_response
+from app.firestore_service import get_users
 
 
 app = create_app()
-app = Flask(__name__)
 app.config['SECRET_KEY'] = 'SUPER SECRETO'
-
-bootstrap = Bootstrap(app)
 
 
 todos = ['Comprar cafe', 'Enviar solicitud de compra', 'Entregar video a productor']
@@ -63,12 +62,16 @@ def hello():
         'username': username
         
     }
-    if login_form.validate_on_submit():
-        username = login_form.username.data
-        session['username'] = username
-        flash('Nombre de usuario registrado con éxito')
+    users = get_users()
+    for user in users:
+        print(user.id)
+        print(user.to_dict())
+    #if login_form.validate_on_submit():
+        #username = login_form.username.data
+       # session['username'] = username
+        #flash('Nombre de usuario registrado con éxito')
         
-        return redirect(url_for('index'))
+        #return redirect(url_for('index'))
     
     return render_template('hello.html', **context)
 
